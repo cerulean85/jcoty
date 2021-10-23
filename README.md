@@ -1,14 +1,19 @@
 # jcoty
 
 
-First:
-Install Node.js and Python 3.8.
+**First**
+Install Node.js v14 and Python 3.8.
 
-Two:
+
+__Two__
 Download ZIP package and unzip.
 
-Three:
+
+__Three__
+
 Execute Script file.
+
 If your OS is windows, execute install-win.bat.
+
 If your OS is linuex, execute install-linux.bat.
 

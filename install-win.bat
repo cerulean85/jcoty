@@ -1,4 +1,2 @@
 @echo off
-cmd.exe &&
-cd client &&
-npm install
+cd client && npm install
