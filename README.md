@@ -14,9 +14,18 @@ __Three__
 
 Execute Script file.
 
-If your OS is windows, execute install-win.bat.
+If your OS is Windows, execute win-install.bat.
 
-If your OS is linuex, execute install-linux.bat.
+If your OS is Linux, execute linux-install.bat.
+
+
+__Four__
+
+Start Execution file.
+
+If you OS is Windows, execute win-start.bat.
+
+If you OS is Linux, execute linux-start.bat.
 
 
 
