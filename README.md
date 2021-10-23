@@ -3,7 +3,7 @@
 
 **J-COTY**
 
-__J__ust __CO__llect __T__ext on the web from __Y__ours.
+**J**ust **CO**llect **T**ext on the web from **Y**ours.
 
 
 **First**
