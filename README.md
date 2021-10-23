@@ -27,6 +27,7 @@ If you OS is Windows, execute win-start.bat.
 
 If you OS is Linux, execute linux-start.bat.
 
+Then, you can see the browser that you can enroll and control you work.
 
 
 __Node.js Forever Process Kill__
