@@ -28,5 +28,5 @@ server/modules/zhbase/__pycache__
 server/modules/modeling/pickles/*_merged_*
 server/modules/modeling/statics_result/pickles/*_merged_*
 server/proto/__pycache__
-
+client/.idea
 kafka/logs
