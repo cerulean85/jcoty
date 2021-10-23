@@ -18,3 +18,11 @@ If your OS is windows, execute install-win.bat.
 
 If your OS is linuex, execute install-linux.bat.
 
+
+
+__Node.js Forever Process Kill__
+
+netstat -ao | findstr 3001
+
+taskkill /F /PID [PROCESS ID]
+
