@@ -1,4 +1,6 @@
 @echo off
+
+SETLOCAL
 set PROJECT_PATH=%cd%
 set CLIENT_PATH=%cd%\client
 set PROXY_PATH=%cd%\client\proxy
@@ -19,3 +21,5 @@ CD %POJECT_PATH%
 
 ::&& npm install && @START node %BIN_FOREVER%\forever %APP% 
 ::cd %CLIENT_PATH% && npm start && cd POJECT_PATH
+
+ENDLOCAL

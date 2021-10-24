@@ -24,7 +24,7 @@ imageio==2.9.0
 itsdangerous==2.0.1
 Jinja2==3.0.1
 joblib==1.0.1
-JPype1 @ file:///D:/__programming/tfextractor/JPype1-1.1.2-cp38-cp38-win_amd64.whl
+JPype1 @ file:///JPype1-1.1.2-cp38-cp38-win_amd64.whl
 kafka-python==2.0.2
 kiwisolver==1.3.1
 konlpy==0.5.2
