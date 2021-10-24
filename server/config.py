@@ -11,7 +11,7 @@ from selenium.webdriver.common.keys import Keys
 
 def get_config(path=''):
     # print(path + "config.json")
-    with open(path + "config.json", "r") as st_json:
+    with open(path + "/config.json", "r") as st_json:
         conf = json.load(st_json)
 
     return conf
@@ -39,9 +39,9 @@ def make_dir(save_dir, work_group_no, channel_spec):
 
 def get_chrome_driver(config_path=''):
     conf = get_config(path=config_path)
-    root_path = os.path.dirname(os.path.abspath(__file__))
+    current_path = config_path
     osname = platform.system()
-    driver_path = root_path + conf["chrome_driver"]["path"] + ('' if osname == "Linux" else 'exe')
+    driver_path = current_path + conf["chrome_driver"]["path"] + ('' if osname == "Linux" else '.exe')
     options = webdriver.ChromeOptions()
     # options.add_argument('headless')
     options.add_argument('--no-sandbox')

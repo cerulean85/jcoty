@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./kafka/bin/windows/kafka-server-stop.bat
+../../../kafka/bin/windows/kafka-server-stop.bat

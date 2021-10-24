@@ -7,6 +7,7 @@ import modules.collect.dir as dir
 from modules.extractor.ExtractorTextNode import ExtractorTextNode
 from modules.zhbase.ZHPickle import ZHPickle
 
+current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 
 def create_doc_text_blocks(work):
 
@@ -46,10 +47,10 @@ def create_doc_text_blocks(work):
 
 
 def work():
-    conf = cfg.get_config(path=dir.config_path)
+    conf = cfg.get_config(path=current_path)
     html_save_dir = conf["storage"]["html_save_dir"]
     csv_save_dir = conf["storage"]["csv_save_dir"]
-    model_path = dir.model_path
+    model_path = current_path + "/models/"
     channel_spec = conf["channel_spec"]
 
     models = {}
@@ -57,8 +58,8 @@ def work():
     for channel in channel_spec:
         if models.get(channel) is None:
             if conf["model"].get(channel) is not None:
-                content_ptp_list_path = dir.model_path + channel + '/' + conf["model"][channel]["content_ptp_list"]
-                taf_rank_path = dir.model_path + channel + '/' + conf["model"][channel]["taf_rank"]
+                content_ptp_list_path = model_path + channel + '/' + conf["model"][channel]["content_ptp_list"]
+                taf_rank_path = model_path + channel + '/' + conf["model"][channel]["taf_rank"]
                 taf_boundary_rank = conf["model"][channel]["taf_boundary_rank"]
 
                 models[channel] = {

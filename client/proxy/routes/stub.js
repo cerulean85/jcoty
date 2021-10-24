@@ -4,7 +4,8 @@ const grpc = require("@grpc/grpc-js");
 const config = require("../config");
 const stub = require("../routes/query");
 const {NULL} = require("mysql/lib/protocol/constants/types");
-const proto_path = "./proto/WorkProtocolService.proto"
+const path=require("path")
+const proto_path = path.join(__dirname, '..', 'proto/WorkProtocolService.proto')
 const packageDefinition = protoLoader.loadSync(
     proto_path,
     {

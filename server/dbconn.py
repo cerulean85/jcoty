@@ -34,9 +34,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 
 db_conn_info = {
-    "user": "tester",
+    "user": "root",
     "password": "123456",
-    "host": "15.165.101.124",
+    "host": "localhost",
     "port": 3306,
     "database": "whateverdot"
 }

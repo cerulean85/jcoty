@@ -38,33 +38,34 @@ def collect_urls(work):
         uci.collect_urls(work)
 
 
-    # while True:
+while True:
 
-# DB 조회
-work_group_list = dbconn.session.query(dbconn.WorkGroups).filter(dbconn.WorkGroups.work_state == 'working').all()
-for wg in work_group_list:
-    # dbconn.session.query(dbconn.WorkGroups) \
-    #     .filter(dbconn.WorkGroups.id == wg.id) \
-    #     .update({dbconn.WorkGroups.work_state: "working"})
+    # DB 조회
+    work_group_list = dbconn.session.query(dbconn.WorkGroups).filter(dbconn.WorkGroups.work_state == 'working').all()
+    for wg in work_group_list:
+        # dbconn.session.query(dbconn.WorkGroups) \
+        #     .filter(dbconn.WorkGroups.id == wg.id) \
+        #     .update({dbconn.WorkGroups.work_state: "working"})
 
-    channels = wg.channels.split(',')
-    procs = []
-    for channel in channels:
-        keywords = wg.keywords.split(',')
-        for keyword in keywords:
-            work = {
-                "channel": channel,
-                "keyword": keyword,
-                "start_date": str(wg.start_date),
-                "end_date": str(wg.end_date),
-                "work_type": "collect_url",
-                "work_group_no": wg.id,
-            }
-            procs.append(Process(target=collect_urls, args=(work,)))
+        channels = wg.channels.split(',')
+        procs = []
+        for channel in channels:
+            keywords = wg.keywords.split(',')
+            for keyword in keywords:
+                work = {
+                    "channel": channel,
+                    "keyword": keyword,
+                    "start_date": str(wg.start_date),
+                    "end_date": str(wg.end_date),
+                    "work_type": "collect_url",
+                    "work_group_no": wg.id,
+                }
+                procs.append(Process(target=collect_urls, args=(work,)))
 
-    for proc in procs:
-        proc.start()
+        for proc in procs:
+            proc.start()
 
+    time.sleep(3)
     # dbconn.session.commit()
 
 # time.sleep(120)

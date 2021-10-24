@@ -12,15 +12,18 @@ import pandas as pd
 from collections import Counter
 import sys
 
-conf = cfg.get_config(path=dir.config_path)
+current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+# current_path = current_path.replace("\\", "/")
+conf = cfg.get_config(path=current_path)
 consumer = kkconn.kafka_consumer("urls")
+# print(conf["storage"])
 html_save_dir = conf["storage"]["html_save_dir"]
 csv_save_dir = conf["storage"]["csv_save_dir"]
 channel_spec = conf["channel_spec"]
 
 
 def work(work_channel_type):
-    chromeDriver = cfg.get_chrome_driver(dir.config_path)
+    chromeDriver = cfg.get_chrome_driver(current_path)
     while True:
         print("Waiting...")
         # time.sleep(60)
