@@ -41,3 +41,19 @@ netstat -ao | findstr 3001
 
 taskkill /F /PID [PROCESS ID]
 
+
+__ZOOKEEPER__
+
+zookeeper.properties
+
+dataDir=%USERPROFILE%\tmp\zookeeper
+
+
+__Kafka__
+
+server.properties
+
+log.dirs=%USERPROFILE%\tmp\kafka-logs
+
+
+
