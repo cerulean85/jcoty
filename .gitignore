@@ -15,6 +15,7 @@ server/kafka/protocol/__pycache__
 server/kafka/record/__pycache__
 server/kafka/serializer/__pycache__
 server/kafka/vendor/__pycache__
+server/modules/__pycache__
 server/models/dna/*_mergedDS_*
 server/models/jna/*_mergedDS_*
 server/models/nav/*_mergedDS_*

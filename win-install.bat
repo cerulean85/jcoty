@@ -9,13 +9,13 @@ SET SERVER_PATH=%PROJECT_PATH%\server
 CD %CLIENT_PATH%
 @START npm install
 
-SETX PYTHON38 "%LOCALAPPDATA%\Programs\Python\Python38" /M
-SETX PATH "%python38%;%PATH%" /M
+SET PYTHON38=%LOCALAPPDATA%\Programs\Python\Python38
+SET PYTHON38_SCRIPTS=%LOCALAPPDATA%\Programs\Python\Python38\Scripts
 
-SETX PYTHON38_SCRIPTS "%LOCALAPPDATA%\Programs\Python\Python38\Scripts" /M
-SETX PATH "%python38_scripts%;%PATH%" /M
+SETX PATH "%PYTHON38%;%PYTHON38_SCRIPTS%;%PATH%" /M
 
-pip install -r %SERVER_PATH%\requirements.txt
+%PYTHON38_SCRIPTS%\pip install %SERVER_PATH%\JPype1-1.1.2-cp38-cp38-win_amd64.whl
+%PYTHON38_SCRIPTS%\pip install -r %SERVER_PATH%\requirements.txt
 
 ENDLOCAL
 

@@ -18,7 +18,6 @@ SET KAFKA_PATH=%cd%\kafka
 goto _loop
 :_break
 
-
 :_loop
 	FOR /F "tokens=4 delims= " %%p IN ('netstat -ano ^| findstr "9092"') DO (
 		SET result=%%p
@@ -43,7 +42,3 @@ ECHO HTML DOWNLOADER started.
 ECHO TEXT EXTRACTOR started.
 
 ENDLOCAL
-
-::
-
-
