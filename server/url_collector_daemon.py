@@ -6,8 +6,6 @@ import url_collector_nav as ucnb
 import url_collector_twt as uct
 import url_collector_ins as uci
 import url_collector_dna as ucd
-import config as cfg
-import modules.collect.dir as dir
 
 def date_range(start, end):
     start = datetime.strptime(start, "%Y-%m-%d")

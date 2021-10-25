@@ -1,23 +1,8 @@
 import time
-from multiprocessing import Process
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
-
-import parallel as prl
 import config as cfg
 import kkconn
 import modules.collect.dir as dir
-from datetime import datetime, timedelta
-import datetime as dt
-import os
-
-
-# def date_range(start, end):
-#     start = datetime.strptime(start, "%Y-%m-%d")
-#     end = datetime.strptime(end, "%Y-%m-%d")
-#     dates = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end - start).days + 1)]
-#     return dates
-
 
 def get_url(work, target_page_no, chromeDriver, conf):
     url_set = set([])

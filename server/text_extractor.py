@@ -1,9 +1,6 @@
 import os
 import time
-
 import config as cfg
-import modules.collect.dir as dir
-
 from modules.extractor.ExtractorTextNode import ExtractorTextNode
 from modules.zhbase.ZHPickle import ZHPickle
 
@@ -111,14 +108,6 @@ def work():
                         }
 
                         create_doc_text_blocks(work)
-                        # print(d)
-
         time.sleep(5)
-        # print(file.split(.))
-
-
-# file_path = conf["storage"]["save_dir"] + channel
-# os.listdir(file_path)
-
 
 work()

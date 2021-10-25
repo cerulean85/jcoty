@@ -1,12 +1,8 @@
 var express = require("express")
 var router = express.Router();
-const config = require("../config");
-const cors = require("cors");
 const grpc = require("../routes/stub");
-// const query = require("../routes/query");
 const query = require("../routes/sqlite");
 const util = require("../routes/util");
-
 
 router.get('/', function(req, res) {
     res.send("Welcome!!" + util.currentDatetime())
@@ -18,37 +14,6 @@ router.post('/echo', function(req, res) {
            return res.send(proto_res)
    })
 });
-
-function generateKeywords(keywords, key_opts) {
-    let currentKeywordIndex = 0
-
-    const split_keywords = keywords.length === 1 ? keywords[0] : keywords.split(',')
-    const split_key_opts = key_opts.length === 1 ? key_opts[0] : key_opts.split(',')
-
-    let currentKeywords = [split_keywords[currentKeywordIndex]]
-    for(var index=0; index<split_key_opts.length; index++) {
-        currentKeywordIndex++;
-        const targetKeyword = split_keywords[currentKeywordIndex]
-        const opt = split_key_opts[index]
-        let refreshedKeywords = [];
-        if(opt === "AND") {
-            for(var jdex=0; jdex<currentKeywords.length; jdex++) {
-                refreshedKeywords.push(currentKeywords[jdex] + ' ' + targetKeyword)
-            }
-            currentKeywords = refreshedKeywords;
-        }
-        if(opt === "OR") {
-            console.log(opt)
-            for(var jdex=0; jdex<currentKeywords.length; jdex++) {
-                refreshedKeywords.push(currentKeywords[jdex])
-                refreshedKeywords.push(currentKeywords[jdex] + ' ' + targetKeyword)
-            }
-            currentKeywords = refreshedKeywords;
-        }
-    }
-
-    return currentKeywords
-}
 
 router.post("/get_work_group_list", function(req, res){
     query.query_select({

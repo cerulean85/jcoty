@@ -8,24 +8,19 @@ import config as cfg
 import kkconn
 import modules.collect.dir as dir
 import time
-import pandas as pd
 from collections import Counter
-import sys
 
 current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
-# current_path = current_path.replace("\\", "/")
 conf = cfg.get_config(path=current_path)
 consumer = kkconn.kafka_consumer("urls")
-# print(conf["storage"])
 html_save_dir = conf["storage"]["html_save_dir"]
 csv_save_dir = conf["storage"]["csv_save_dir"]
 channel_spec = conf["channel_spec"]
 
-
 def work(work_channel_type):
     chromeDriver = cfg.get_chrome_driver(current_path)
     while True:
-        print("Waiting...")
+        # print("Waiting...")
         # time.sleep(60)
         records = consumer.poll(3000)
         for tp, record in records.items():
@@ -107,9 +102,9 @@ def work(work_channel_type):
 
 if __name__ == "__main__":
     procs = []
-    # procs.append(Process(target=work, args=("ins",)))
-    # procs.append(Process(target=work, args=("twt",)))
-    # procs.append(Process(target=work, args=("nav",)))
+    procs.append(Process(target=work, args=("ins",)))
+    procs.append(Process(target=work, args=("twt",)))
+    procs.append(Process(target=work, args=("nav",)))
     procs.append(Process(target=work, args=("dna",)))
     for proc in procs:
         proc.start()

@@ -1,20 +1,11 @@
-import json
-import os
-import time
-from multiprocessing import Process
+import json, os, time
 import dbconn as db
-# import kkconn
 import config as cfg
 import modules.collect.dir as dir
 
-
-# import network as net
-# import config
-
-
 def daemon():
-    conf = cfg.get_config(path=dir.config_path)
-    channel_spec = conf["channel_spec"]
+    current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+    conf = cfg.get_config(path=current_path)
     html_save_dir = conf["storage"]["html_save_dir"]
     csv_save_dir = conf["storage"]["csv_save_dir"]
 
@@ -22,7 +13,6 @@ def daemon():
         work_group_list = db.session.query(db.WorkGroups) \
             .filter(db.WorkGroups.work_state == 'working').all()
 
-        work_group_table = {}
         for work_group in work_group_list:
             report = {}
             target_csv_line_count = 0

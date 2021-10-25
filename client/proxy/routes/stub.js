@@ -2,7 +2,7 @@
 const protoLoader = require("@grpc/proto-loader");
 const grpc = require("@grpc/grpc-js");
 const config = require("../config");
-const stub = require("../routes/query");
+const stub = require("./mysql_con");
 const {NULL} = require("mysql/lib/protocol/constants/types");
 const path=require("path")
 const proto_path = path.join(__dirname, '..', 'proto/WorkProtocolService.proto')
