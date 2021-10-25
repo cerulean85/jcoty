@@ -26,8 +26,8 @@
 
 ## object {"work.channel": "jna"} 이런 식으로.
 
-from pymongo import MongoClient
-from pymongo.cursor import CursorType
+# from pymongo import MongoClient
+# from pymongo.cursor import CursorType
 import sqlalchemy as db
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
@@ -44,6 +44,9 @@ db_conn_info = {
 db_url = f"mysql+pymysql://{db_conn_info['user']}:{db_conn_info['password']}@" \
          f"{db_conn_info['host']}:{db_conn_info['port']}/{db_conn_info['database']}?charset=utf8"
 
+db_url = 'sqlite:///../jcoty.db'
+
+
 Base = declarative_base()
 class WorkGroups(Base):
     __tablename__ = "work_groups"
@@ -51,10 +54,13 @@ class WorkGroups(Base):
     title = db.Column(db.Text, nullable=False)
     keywords = db.Column(db.Text, nullable=False)
     channels = db.Column(db.Text, nullable=False)
-    start_date = db.Column(db.DateTime, nullable=True)
-    end_date = db.Column(db.DateTime, nullable=True)
+    start_date = db.Column(db.Text, nullable=True)
+    # start_date = db.Column(db.DateTime, nullable=True)
+    end_date = db.Column(db.Text, nullable=True)
+    # end_date = db.Column(db.DateTime, nullable=True)
     work_state = db.Column(db.Text, nullable=True)
-    update_time = db.Column(db.DateTime, nullable=True)
+    update_time = db.Column(db.Text, nullable=True)
+    # update_time = db.Column(db.DateTime, nullable=True)
     report = db.Column(db.Text, nullable=True)
     deleted = db.Column(db.Integer, nullable=True, default=0)
 
@@ -64,17 +70,29 @@ session = Session(engine, future=True)
 conn = engine.connect()
 metadata = db.MetaData()
 table = db.Table('work_groups', metadata, autoload=True, autoload_with=engine)
-query = db.select([table]).where(table.columns.work_state == 'attached')
+
+# SELECT!!
+# work_group_list = session.query(WorkGroups).filter(WorkGroups.work_state == 'waiting').all()
+
+
+
+
+
+
+# query = db.select([table]).where(table.columns.work_state == 'waiting')
 # print(query)
-# work_groups = WorkGroups.query.filter_by(work_state='attached').first()
+# work_groups = WorkGroups.query.filter_by(work_state='waiting')
+# print(work_groups)
+# db
 # work_group_list = session.query(WorkGroups).filter(WorkGroups.work_state == 'attached').all()
-
-
+# work_group_list = session.query(WorkGroups).filter(WorkGroups.work_state == 'waiting').all()
+# print(work_group_list[0].id)
 # result_proxy = conn.execute(query)
 # result_set = result_proxy.fetchall()
-# session.query(WorkGroups).filter(WorkGroups.work_state == 'attached').update({WorkGroups.report: "QWFQWF"})
+# print(result_set)
+# session.query(WorkGroups).filter(WorkGroups.work_state == 'waiting').update({WorkGroups.report: "QWFQWF"})
 # work_group = work_group_list[0]
-# work_group.report = "good!!"
+# # work_group.report = "good!!"
 # session.commit()
 # print(work_group.id)
 
@@ -84,65 +102,65 @@ query = db.select([table]).where(table.columns.work_state == 'attached')
 # base.metadata.create_all(engine)
 
 
-class DBHandler:
-    def __init__(self):
-        host = "localhost"
-        port = "27017"
-        self.client = MongoClient(host, int(port))
-
-    def map_reduce(self, channel, reduce_value, db_name=None, collection_name=None):
-        map = "function() { emit(this." + reduce_value + ", 1); }"
-        reduce = "function(key, values) { return Array.sum(values) }"
-        out = "frequency_" + reduce_value + '_' + channel
-        query = {"channel": channel}
-        self.client[db_name][collection_name].map_reduce(map, reduce, out, query=query)
-
-    def insert_item_one(self, data, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].insert_one(data).inserted_id
-        return result
-
-    def insert_item_many(self, datas, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].insert_many(datas).inserted_ids
-        return result
-
-    def insert_urls(self, urls, work):
-        data_list = []
-        for url in urls:
-            data_list.append({
-                "url": url,
-                "work": work,
-                "save_path": ''
-            })
-        self.insert_item_many(data_list, db_name="whateverdot", collection_name="urls")
-
-
-    def find_item_one(self, condition=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].find_one(condition, {"_id": False})
-        return result
-
-    def find_item(self, condition=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].find(condition, {"_id": False}, no_cursor_timeout=True, cursor_type=CursorType.EXHAUST)
-        return result
-
-    def delete_item_one(self, condition=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].delete_one(condition)
-        return result
-
-    def delete_item_many(self, condition=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].delete_many(condition)
-        return result
-
-    def update_item_one(self, condition=None, update_value=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].update_one(filter=condition, update=update_value)
-        return result
-
-    def update_item_many(self, condition=None, update_value=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].update_many(filter=condition, update=update_value)
-        return result
-
-    def text_search(self, text=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].find({"text": text})
-        return result
+# class DBHandler:
+#     def __init__(self):
+#         host = "localhost"
+#         port = "27017"
+#         self.client = MongoClient(host, int(port))
+#
+#     def map_reduce(self, channel, reduce_value, db_name=None, collection_name=None):
+#         map = "function() { emit(this." + reduce_value + ", 1); }"
+#         reduce = "function(key, values) { return Array.sum(values) }"
+#         out = "frequency_" + reduce_value + '_' + channel
+#         query = {"channel": channel}
+#         self.client[db_name][collection_name].map_reduce(map, reduce, out, query=query)
+#
+#     def insert_item_one(self, data, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].insert_one(data).inserted_id
+#         return result
+#
+#     def insert_item_many(self, datas, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].insert_many(datas).inserted_ids
+#         return result
+#
+#     def insert_urls(self, urls, work):
+#         data_list = []
+#         for url in urls:
+#             data_list.append({
+#                 "url": url,
+#                 "work": work,
+#                 "save_path": ''
+#             })
+#         self.insert_item_many(data_list, db_name="whateverdot", collection_name="urls")
+#
+#
+#     def find_item_one(self, condition=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].find_one(condition, {"_id": False})
+#         return result
+#
+#     def find_item(self, condition=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].find(condition, {"_id": False}, no_cursor_timeout=True, cursor_type=CursorType.EXHAUST)
+#         return result
+#
+#     def delete_item_one(self, condition=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].delete_one(condition)
+#         return result
+#
+#     def delete_item_many(self, condition=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].delete_many(condition)
+#         return result
+#
+#     def update_item_one(self, condition=None, update_value=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].update_one(filter=condition, update=update_value)
+#         return result
+#
+#     def update_item_many(self, condition=None, update_value=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].update_many(filter=condition, update=update_value)
+#         return result
+#
+#     def text_search(self, text=None, db_name=None, collection_name=None):
+#         result = self.client[db_name][collection_name].find({"text": text})
+#         return result
 
 
 

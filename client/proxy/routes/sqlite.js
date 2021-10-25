@@ -1,4 +1,14 @@
-const config = require("../config");
+var sqlite3 = require('sqlite3').verbose();
+const path = require('path')
+const dbPath = path.resolve(__dirname, '../../../jcoty.db')
+let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+        console.error(err.message);
+        console.error(dbPath);
+    } else {
+        console.log('Connected to the database.');
+    }
+});
 
 const log = {
     queryCallRequest: function (sql, addr) {
@@ -32,34 +42,22 @@ const log = {
 
 function query(sql, addr, action) {
     log.queryCallRequest(sql, addr);
-    config.pool.getConnection(function(err, conn) {
+
+    // db.serialize();
+    db.all(sql, (err, result) => {
         if (err) {
-            console.log('######### Error in connection database');
+            console.log('######### Exist Err');
+            console.log(sql);
             action({
-                type: 'conn',
-                message: 'Connection Error From DB',
+                type: 'Error Message',
+                message: err,
             }, null);
-            conn.release();
             return;
         }
-
-        conn.query(sql, function (err, result) {
-            conn.release();
-            if (err) {
-                console.log('######### Syntax Error');
-                console.log(sql);
-                action({
-                    type: 'syntax',
-                    message: 'Syntax Error From DB',
-                }, null);
-                return;
-            }
-            log.queryCallResponse(result, sql, addr);
-            action({type: 'success' }, result);
-        });
-    });
+        log.queryCallResponse(result, sql, addr);
+        action({type: 'success' }, result);
+    })
 }
-
 
 module.exports = {
 
@@ -101,7 +99,7 @@ module.exports = {
             if(obj.res_send)
                 obj.call_res.send({
                     err: undefined,
-                    insert_id: result.insertId
+                    // insert_id: result.insertId
                 });
 
             if (result.insertId > 0 && obj.emit !== undefined)

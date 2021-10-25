@@ -1,5 +1,16 @@
+require('date-utils');
+
 module.exports = {
 
+    currentDatetime: function() {
+        const newDate = new Date();
+        return newDate.toFormat('YYYY-MM-DD HH24:MI:SS');
+    },
+
+    stringToDatetime: function (strDt) {
+        var d = new Date(strDt)
+        return d
+    },
 
     datetimeFormatting: function (dt, format="YYYY-MM-DD HH:mm:ss") {
         let month = dt.getMonth() + 1;
