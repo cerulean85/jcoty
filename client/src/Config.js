@@ -1,5 +1,5 @@
 const config = {
     proxyPort : 3001,
-    host: 'localhost',
+    host: '218.150.182.180',
 };
 module.exports = config;
