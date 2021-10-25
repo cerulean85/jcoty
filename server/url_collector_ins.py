@@ -1,12 +1,12 @@
+import os
 import time
 from selenium.webdriver.common.keys import Keys
 import config as cfg
 import kkconn
-import modules.collect.dir as dir
 
+current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 def login(chromeDriver, conf):
 
-    domain = conf["ins"]["domain"]
     account_id = conf["ins"]["account"]["id"]
     account_pass = conf["ins"]["account"]["pass"]
 
@@ -23,9 +23,9 @@ def login(chromeDriver, conf):
     time.sleep(3)
 
 def collect_urls(work):
-
-    conf = cfg.get_config(path=dir.config_path)
-    chromeDriver = cfg.get_chrome_driver(config_path=dir.config_path)
+    current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+    conf = cfg.get_config(path=current_path)
+    chromeDriver = cfg.get_chrome_driver(config_path=current_path)
     login(chromeDriver, conf)
 
     current_url_count = 0

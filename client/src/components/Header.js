@@ -7,10 +7,10 @@ class Header extends React.Component {
                 style={{
                     margin: 'auto',
                     width: '80%',
-                    height: 120,
+                    height: 80,
                     borderTop: '1px solid black',
-                    paddingTop: 60,
-                    fontSize: 50
+                    paddingTop: 50,
+                    fontSize: 40
                 }}
             >BIG DATA COLLECTION
             </div>

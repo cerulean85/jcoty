@@ -1,15 +1,14 @@
 import time
 from bs4 import BeautifulSoup
 import config as cfg
-import modules.collect.dir as dir
 import datetime as dt
 import os
 
+current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 def collect_urls(work):
-    conf = cfg.get_config(path=dir.config_path)
-    chromeDriver = cfg.get_chrome_driver(config_path=dir.config_path)
+    conf = cfg.get_config(path=current_path)
+    chromeDriver = cfg.get_chrome_driver(config_path=current_path)
 
-    channel = work["channel"]
     work_group_no = work["work_group_no"]
     keyword = work["keyword"]
     start_date = work["start_date"]

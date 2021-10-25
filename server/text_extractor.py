@@ -35,8 +35,8 @@ def create_doc_text_blocks(work):
 
         with open(save_file_path, "w", encoding="utf-8") as f:
             f.write(str_text_nodes)
-        with open(save_file_path + 'f', "w", encoding="utf-8") as f:
-            f.write(mid_text_nodes)
+        # with open(save_file_path + 'f', "w", encoding="utf-8") as f:
+        #     f.write(mid_text_nodes)
 
         print("Converted [{}]...".format(save_file_path))
     except Exception as e:

@@ -1,24 +1,19 @@
 import React from "react";
 import WorkItem from "./WorkItem";
-import * as R from "../Resources";
-import * as CFG from "../Config"
+import cfg from "../config"
 import axios from "axios";
 import PopupWorkDetail from "./PopupWorkDetail";
-import {proxyIP} from "../Config";
 
 class WorkTable extends React.Component {
 
     constructor(props) {
         super(props);
-        // console.log('constructor')
         this.state = {
             list: [],
             isOpen: false,
             date: new Date(),
             popupItem: {}
         };
-
-        // this.test = this.test.bind(this)
     }
 
     componentDidMount() {
@@ -32,8 +27,6 @@ class WorkTable extends React.Component {
             () => this.update(),
             1000
         );
-
-
     }
 
     tick() {
@@ -44,14 +37,7 @@ class WorkTable extends React.Component {
         let list = this.state.list;
         for(let i=0; i<list.length; i++) {
             let item = list[i];
-            if(item.current_state === R.STATE_PROCESSING) {
-                let v1 = new Date(item.work_started_datetime);
-                let v2 = Date.now();
-                item['view_running_time'] = item.running_time + Math.floor((v2 - v1.getTime()) / 1000);
-                list[i] = item;
-            } else {
-                item['view_running_time'] = item.running_time;
-            }
+            item['view_running_time'] = item.running_time;
          }
 
         this.setState({list: list})
@@ -91,19 +77,18 @@ class WorkTable extends React.Component {
     }
 
     openPopup = (item) => {
-        // console.log('이건가??')
-        // console.log(e)
         this.setState({isOpen: !this.state.isOpen, popupItem: item})
     };
 
     closePopup = () => {
-        window.location.reload();
+        // window.location.reload();
         // window.scrollTo(0, 0);
         this.setState({isOpen: false})
     };
 
     getWorGroupList = () => {
-        axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/get_work_group_list").then( (response) => {
+
+        axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/get_work_group_list`).then( (response) => {
             const list = response.data.list;
             this.setState({list: list})
         });

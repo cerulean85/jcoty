@@ -38,20 +38,18 @@ class ButtonOpenAddWorkWindow extends React.Component {
                     backgroundColor: this.state.backgroundColor,
                     cursor: 'pointer',
                     width: '100%',
-                    height: 120}}>
+                    height: 80}}>
                 <div style={{
                     display: 'flex',
                     position: 'absolute',
-                    top: '50%',
+                    top: '53%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)' }}>
                     <img src={R.Images.addWork}
-                         style={{
-                             width:52,
-                             height: 52, }} />
+                         style={{ width:40, height: 40, }} />
                     <div style={{
                         fontWeight:'bolder',
-                        fontSize: 32,
+                        fontSize: 26,
                         color: '#ACACAC' }}>&nbsp;&nbsp;새 작업 추가하기</div>
                 </div>
             </div>

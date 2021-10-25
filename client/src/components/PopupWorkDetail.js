@@ -1,11 +1,12 @@
 import React from "react"
 import '../App.css';
 import * as R from "../Resources";
-import * as CFG from "../Config"
+import cfg from "../config"
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import ProgressStateTextBox from "./ProgressStateTextBox";
 import WorkItem from "./WorkItem";
+import {CollectTargetName} from "../Resources";
 
 const moment = require('moment');
 class PopupWorkDetail extends React.Component {
@@ -39,19 +40,19 @@ class PopupWorkDetail extends React.Component {
 
             // console.log('보자보자')
             // console.log(this.state.item)
-            let data = {
-                group_id: this.state.item.group_id,
-                name: this.state.item.name
-            };
+            // let data = {
+            //     group_id: this.state.item.group_id,
+            //     name: this.state.item.name
+            // };
 
             // console.log(data);
 
-            const response = await axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/update_work_group_name", data);
-            if(response.status !== 200) {
-                alert('요청한 작업을 수행할 수 없습니다.');
-            } else {
-                alert('처리되었습니다.')
-            }
+            // const response = await axios.post('http://localhost:3030/update_work_group_name', data);
+            // if(response.status !== 200) {
+            //     alert('요청한 작업을 수행할 수 없습니다.');
+            // } else {
+            //     alert('처리되었습니다.')
+            // }
         };
         request()
     };
@@ -72,21 +73,21 @@ class PopupWorkDetail extends React.Component {
 
         this.updateID = setInterval(
             () => this.update(),
-            10000
+            1000
         );
     }
 
     getWorkStateList = () => {
 
-        let data = {
-            group_id: this.state.item.group_id
-        };
-
-        axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/get_work_state_list", data).then( (response) => {
-            const list = response.data.list;
-            this.setState({list: list});
-            console.log(list[0])
-        });
+        // let data = {
+        //     group_id: this.state.item.group_id
+        // };
+        //
+        // axios.post('http://localhost:3030/get_work_state_list', data).then( (response) => {
+        //     const list = response.data.list;
+        //     this.setState({list: list});
+        //     console.log(list[0])
+        // });
     };
 
     tick() {
@@ -95,10 +96,6 @@ class PopupWorkDetail extends React.Component {
         });
 
         let item = this.state.item;
-        if(item.current_state === R.STATE_PROCESSING) {
-            item.running_time = item.running_time + 1;
-
-        }
         this.setState({item: item})
     }
 
@@ -108,26 +105,10 @@ class PopupWorkDetail extends React.Component {
     }
 
     update() {
-
-        this.getWorkStateList()
-
-        axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/get_work_group", {
-            group_id: this.state.item.group_id
-        }).then((response) => {
-            let oldItem = this.state.item;
-            let newItem = response.data.list[0];
-
-            if (oldItem.current_state === R.STATE_PROCESSING && newItem.current_state === R.STATE_PROCESSING) {
-                if (oldItem.group_id === newItem.group_id) {
-                    oldItem.current_work_count = newItem.current_work_count;
-                    oldItem.total_work_count = newItem.total_work_count;
-                    oldItem.running_time = newItem.running_time;
-                    oldItem = newItem;
-                }
-            }
-
-            this.setState({item: oldItem})
-        });
+        // axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/get_work_group_list`).then( (response) => {
+        //     const list = response.data.list;
+        //     this.setState({list: list})
+        // });
     }
 
     componentDidUpdate() {
@@ -143,95 +124,91 @@ class PopupWorkDetail extends React.Component {
 
     renderProgressStateTextBox() {
         return <ProgressStateTextBox
-            value={this.state.item.current_state}
+            value={this.state.item.work_state}
         />;
     }
 
     render() {
 
-        let tmpKwdSet = [
-            { keyword: this.state.item.keyword1, opt: this.state.item.keyword_opt1},
-            { keyword: this.state.item.keyword2, opt: this.state.item.keyword_opt2},
-            { keyword: this.state.item.keyword3, opt: this.state.item.keyword_opt3},
-            { keyword: this.state.item.keyword4, opt: this.state.item.keyword_opt4},
-            { keyword: this.state.item.keyword5, opt: this.state.item.keyword_opt5} ];
-
-        let kwdKeySet = [ tmpKwdSet[0].keyword ];
-
-        for (let i=1; i<tmpKwdSet.length; i++) {
-
-            const kwdKeySetSize = kwdKeySet.length;
-            const kwdFormat = tmpKwdSet[i];
-            if(kwdFormat.keyword === undefined || kwdFormat.keyword === '') continue;
-
-            if(kwdFormat.opt === 'and') {
-                for (let k=0; k<kwdKeySetSize; k++) {
-                    const keyword = kwdKeySet[k];
-                    if(keyword === undefined || keyword === '') continue;
-                    kwdKeySet[k] = keyword + ' ' + kwdFormat.keyword;
-                }
-            }
-
-            if(kwdFormat.opt === 'or') {
-                for (let k=0; k<kwdKeySetSize; k++) {
-                    const keyword = kwdKeySet[k];
-                    if(keyword === undefined || keyword === '') continue;
-                    kwdKeySet.push(keyword + ' ' + kwdFormat.keyword);
-                    kwdKeySet.push(kwdFormat.keyword);
-                }
-            }
-        }
-
-        let keywords = '';
-        for (let i=0; i<kwdKeySet.length; i++) {
-            keywords += kwdKeySet[i] + ( i === (kwdKeySet.length-1) ? '': '\u00A0,\u00A0\u00A0\u00A0');
-        }
-
+        // let tmpKwdSet = [
+        //     { keyword: this.state.item.keyword1, opt: this.state.item.keyword_opt1},
+        //     { keyword: this.state.item.keyword2, opt: this.state.item.keyword_opt2},
+        //     { keyword: this.state.item.keyword3, opt: this.state.item.keyword_opt3},
+        //     { keyword: this.state.item.keyword4, opt: this.state.item.keyword_opt4},
+        //     { keyword: this.state.item.keyword5, opt: this.state.item.keyword_opt5} ];
+        //
+        // let kwdKeySet = [ tmpKwdSet[0].keyword ];
+        //
+        // for (let i=1; i<tmpKwdSet.length; i++) {
+        //
+        //     const kwdKeySetSize = kwdKeySet.length;
+        //     const kwdFormat = tmpKwdSet[i];
+        //     if(kwdFormat.keyword === undefined || kwdFormat.keyword === '') continue;
+        //
+        //     if(kwdFormat.opt === 'and') {
+        //         for (let k=0; k<kwdKeySetSize; k++) {
+        //             const keyword = kwdKeySet[k];
+        //             if(keyword === undefined || keyword === '') continue;
+        //             kwdKeySet[k] = keyword + ' ' + kwdFormat.keyword;
+        //         }
+        //     }
+        //
+        //     if(kwdFormat.opt === 'or') {
+        //         for (let k=0; k<kwdKeySetSize; k++) {
+        //             const keyword = kwdKeySet[k];
+        //             if(keyword === undefined || keyword === '') continue;
+        //             kwdKeySet.push(keyword + ' ' + kwdFormat.keyword);
+        //             kwdKeySet.push(kwdFormat.keyword);
+        //         }
+        //     }
+        // }
+        //
+        // let keywords = '';
+        // for (let i=0; i<kwdKeySet.length; i++) {
+        //     keywords += kwdKeySet[i] + ( i === (kwdKeySet.length-1) ? '': '\u00A0,\u00A0\u00A0\u00A0');
+        // }
+        //
         let targets = '';
-        const collectTarget = this.state.item.collect_target.split('/');
-        for(let i=0; i<collectTarget.length; i++) {
-            const name = collectTarget[i];
+        const channels = this.state.item.channels.split(',');
+        for(let i=0; i<channels.length; i++) {
+            const name = channels[i];
             if(name === undefined || name === '') continue;
-            targets += R.CollectTargetName[collectTarget[i]] + "\u00A0\u00A0\u00A0\u00A0";
+            targets += R.CollectTargetName[channels[i]] + "\u00A0\u00A0\u00A0\u00A0";
         }
 
-        const secs = this.state.item.running_time;
+        let total_html_file_count = 0
+        let total_csv_line_count = 0
+        const report = this.state.item.report;
+        console.log(report)
+        let reportArr = []
+        for (const channel in report) {
+            total_html_file_count += report[channel].html_file_count
+            total_csv_line_count += report[channel].csv_line_count
+            reportArr.push({
+                channelName: R.CollectTargetName[channel],
+                htmlFileCount: report[channel].html_file_count,
+                csvLineCount: report[channel].csv_line_count
+            })
+        }
+        const collectionState =
+            <div>&nbsp;&nbsp;HTML문서&nbsp;<font color={"#00b050"}>{total_html_file_count}</font>건 수집,
+                추출된 텍스트 <font color={"#FF4E00"}>{total_csv_line_count}</font>줄</div>
 
-        const hourNum = Math.floor(secs / 3600);
-        const hourMod = secs % 3600;
-        const minuteNum = Math.floor(hourMod / 60);
-        const minuteMod = hourMod % 60;
-
-        const hour   = (hourNum < 10 ? '0':'') + hourNum;
-        const minute = (minuteNum < 10 ? '0':'') + minuteNum;
-        const second = (minuteMod < 10 ? '0':'') + minuteMod;
-
-
-        let no = 1;
-        const listItems = this.state.list.map((item) =>
-             <div style={{width: '100%', display: 'flex', height:'50px'}}>
-                 <div style={{width: '5%', color:'#aaaaaa'}}>{no++}</div>
-                 <div style={{width: '8%', color:'#aaaaaa'}}>{R.CollectTargetName[item.site_type]}</div>
-                 <div style={{width: '22%'}}>{item.keyword}</div>
-                 <div style={{ width: '20%', color: '#666666' }}>
-                     <label style={{color:'#0099ff', fontSize:18}}>{item.total_work_count}</label>건&nbsp;중
-                     &nbsp;&nbsp;<label style={{color:'#a9d18e', fontSize:16}}>{item.finished_work_count}</label>
-                     &nbsp;건&nbsp;완료
-                 </div>
-
-
-                 <div style={{width: '10%'}}>{
-
-                     item.total_work_count > 0 ?
-
-                         (item.finished_work_count > item.total_work_count ?
-                             100:Math.floor(item.finished_work_count*100/item.total_work_count)) : 0
-
-                 }%</div>
-                 <div style={{width: '15%'}}><ProgressStateTextBox value={item.current_state}/></div>
-             </div>
-         );
-
+        // eslint-disable-next-line no-unused-expressions
+        let collectionDetail =
+            <div>
+                {
+                    reportArr.map(report =>
+                        <table style={{width:500}}>
+                            <tr>
+                                <td width={'25%'}><font color={"#aaaaaa"}>{report.channelName}</font></td>
+                                <td width={'25%'} style={{textAlign:'center'}}><font color={"#00b050"}>{report.htmlFileCount}</font></td>
+                                <td width={'25%'} style={{textAlign:'center'}}><font color={"#FF4E00"}>{report.csvLineCount}</font></td>
+                            </tr>
+                        </table>
+                    )
+                }
+            </div>
         return (
             <div style={{
                 position: 'fixed',
@@ -297,7 +274,7 @@ class PopupWorkDetail extends React.Component {
                     }}>
                         <div style={{width:'5%' }}/>
                         <div style={{width:'15%', textAlign:'center'}}>작업이름</div>
-                        <input style={{width: '50%'}} type='text' onChange={this.onNameChanged} value={this.state.item.name}/>
+                        <input style={{width: '50%'}} type='text' onChange={this.onNameChanged} value={this.state.item.title}/>
                         <div style={{width:10 }}/>
                         <button style={{
                             width:50, fontSize:14, cursor:'pointer',
@@ -305,7 +282,6 @@ class PopupWorkDetail extends React.Component {
                                 onClick={this.updateName}>수정
                         </button>
                     </div>
-
                     <div style={{
                         width: '100%',
                         marginTop: 40,
@@ -315,7 +291,7 @@ class PopupWorkDetail extends React.Component {
                         <div style={{width:'5%' }}/>
                         <div style={{width:'15%', textAlign:'center'}}>키워드</div>
                         <div style={{width:'70%', color:'#aaaaaa', textAlign:'left', wordWrap: 'break-word'}}>
-                            {keywords}
+                            {this.state.item.keywords}
                         </div>
                     </div>
 
@@ -328,7 +304,7 @@ class PopupWorkDetail extends React.Component {
                         <div style={{width:'5%' }}/>
                         <div style={{width:'15%', textAlign:'center'}}>수집기간</div>
                         <div style={{display:'flex', color:'#aaaaaa'}}>{moment(this.state.item.start_date).format('YYYY-MM-DD')}&nbsp;~&nbsp;{moment(this.state.item.end_date).format('YYYY-MM-DD')}</div>
-                </div>
+                    </div>
 
                     <div style={{
                         width: '100%',
@@ -353,15 +329,10 @@ class PopupWorkDetail extends React.Component {
                         <div>
 
                             <div style={{ marginLeft: 20, textAlign:'left', fontSize:14, color: '#666666' }}>
-                                <label style={{color:'#ff9e01', fontSize:16}}>{hour}:{minute}:{second}</label>&nbsp;&nbsp;경과
+                                {/*<label style={{color:'#ff9e01', fontSize:16}}>{hour}:{minute}:{second}</label>&nbsp;&nbsp;경과*/}
                             </div>
-                            <div style={{ marginLeft: 20, textAlign:'left', fontSize:14, color: '#666666' }}>
-                                <label style={{color:'#0099ff', fontSize:18}}>{this.state.item.total_work_count}</label>건&nbsp;중
-                                &nbsp;&nbsp;<label style={{color:'#a9d18e', fontSize:16}}>{this.state.item.current_work_count}</label>
-                                &nbsp;건&nbsp;완료
-                            </div>
+                            {collectionState}
                         </div>
-
                     </div>
 
                     <div style={{
@@ -381,14 +352,22 @@ class PopupWorkDetail extends React.Component {
                         fontSize: 18,
                         display:'flex'
                     }}>
-                        <div style={{width:'5%' }}/>
-                        <div style={{width:'15%', textAlign:'center'}}></div>
-                        <div style={{width: '80%'}}>
-                            {listItems}
+                        <div style={{width:'20%' }}/>
+                        {/*<div style={{width:'15%', textAlign:'center'}}></div>*/}
+                        <div style={{width: '80%', textAlign:'left'}}>
+                            <div>
+                            <table style={{width:500}}>
+                                <tr>
+                                    <td width={'25%'} style={{fontSize:16}}>수집 채널</td>
+                                    <td width={'25%'} style={{fontSize:16, textAlign:'center'}}>HTML 문서(건)</td>
+                                    <td width={'25%'} style={{fontSize:16, textAlign:'center'}}>추출된 텍스트(줄)</td>
+                                </tr>
+                            </table>
+                            </div>
+                            {collectionDetail}
                         </div>
                         {/*<textarea ref={this.textLog} style={{width:'70%', height:200, resize:'none'}} readOnly={true} value={this.state.log} onChange={this.onLogChanged}/>*/}
                     </div>
-
                 </div>
             </div>
 

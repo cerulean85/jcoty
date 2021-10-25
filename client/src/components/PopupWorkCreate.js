@@ -1,7 +1,7 @@
 import React, {useState}from "react"
 import '../App.css';
 import * as R from "../Resources";
-import * as CFG from "../Config"
+import cfg from "../config"
 import DatePicker, { registerLocale, setDefaultLocale } from  "react-datepicker";
 import ButtonControlPopup from "./ButtonCreateWork"
 import CheckboxTarget from "./CheckboxTarget"
@@ -23,10 +23,10 @@ const ParentComponent = props => (
             <div style={{width:'5%' }}/>
             <div style={{width:'15%', textAlign:'center'}}>키워드1</div>
             <input style={{width: '50%'}} type='text' onChange={props.keywordChanged} value={props.keyword1}/>
-            <select value={props.keywordOpt1} onChange={props.keywordOptChanged} disabled={true}>
-                <option value="and">AND</option>
-                <option value="or">OR</option>
-            </select>
+            {/*<select value={props.keywordOpt1} onChange={props.keywordOptChanged} disabled={true}>*/}
+            {/*    <option value="and">AND</option>*/}
+            {/*    <option value="or">OR</option>*/}
+            {/*</select>*/}
             <div style={{width:10 }}/>
 
             <button style={{
@@ -55,12 +55,12 @@ const ChildComponent = (props) => <div>
         <input style={{width: '50%'}} type='text'
                onChange={props.keywordChanged}
                value={props.keyword} />
-        <select
-            onChange={props.keywordOptChanged}
-            value={props.keywordOpt} >
-            <option value="and">AND</option>
-            <option value="or">OR</option>
-        </select>
+        {/*<select*/}
+        {/*    onChange={props.keywordOptChanged}*/}
+        {/*    value={props.keywordOpt} >*/}
+        {/*    <option value="and">AND</option>*/}
+        {/*    <option value="or">OR</option>*/}
+        {/*</select>*/}
     </div>
 
 </div>;
@@ -107,7 +107,7 @@ class PopupWorkCreate extends React.Component {
         }
 
         this.state[ 'keyword' + ( this.state.numChildren + 1 )  ] = '';
-        this.state[ 'keywordOpt' + ( this.state.numChildren + 1 )  ] = '';
+        // this.state[ 'keywordOpt' + ( this.state.numChildren + 1 )  ] = '';
         this.setState({
             numChildren: this.state.numChildren + 1
         });
@@ -185,7 +185,7 @@ class PopupWorkCreate extends React.Component {
         if(window.confirm('새 작업을 추가하시겠습니까?')) {
 
             console.log(data)
-            axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/enroll_works", data).then((response) => {
+            axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/enroll_works`, data).then((response) => {
                 console.log(data)
                 // console.log(response);
                 if(response.status === 200) {
@@ -384,10 +384,10 @@ class PopupWorkCreate extends React.Component {
                             />
                             <div style={{width:'3%' }}/>
                             <CheckboxTarget
-                                name={"targetFacebook"}
-                                width={100}
-                                text={"페이스북"}
-                                checked={this.state.targetFacebook}
+                                name={"targetInstagram"}
+                                width={120}
+                                text={"인스타그램"}
+                                checked={this.state.targetInstagram}
                                 onChanged={this.onTargetChanged}
                             />
                         </div>

@@ -14,6 +14,6 @@ app.use(cookieParser());
 app.use("/action", action)
 
 app.listen(config.port, () => {
-    console.log(`Server Listening at http://localhost:${config.port}`)
+    console.log(`Server Listening at http://${config.host}:${config.port}`)
 });
 

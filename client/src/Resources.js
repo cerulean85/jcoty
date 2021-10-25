@@ -4,7 +4,7 @@ export const STATE_PROBING         = 'probing';
 // export const STATE_PROBE_STOPPED   = 'probe_stopped';
 export const STATE_COLLECTING      = 'collecting';
 // export const STATE_COLLECT_STOPPED = 'collect_stopped';
-export const STATE_PROCESSING      = 'processing';
+export const STATE_WORKING         = 'working';
 export const STATE_ATTACHED        = 'attached';
 export const STATE_DEATTACHED      = 'deattached';
 export const STATE_PAUSED          = 'paused';
@@ -16,6 +16,7 @@ export const STATE_ERROR           = 'error';
 export const StateExpression = {
     'waiting': { state:'waiting', label: '대기', backgroundColor: '#00b050', width: 100 },
     'attached': { state:'attached', label: '시작됨', backgroundColor: '#0070c0', width: 100 },
+    'working': { state:'attached', label: '수집중', backgroundColor: '#0070c0', width: 100 },
     'collect_url': { state:'collect_url', label: '링크 수집중', backgroundColor: '#00b050', width: 100 },
     'collect_doc': { state:'collect_doc', label: '웹 페이지 수집중', backgroundColor: '#FF4E00', width: 100 },
     'extract_text': { state:'extract_text', label: '텍스트 수집중', backgroundColor: '#0070c0', width: 100 },
@@ -28,14 +29,20 @@ export const StateExpression = {
 
 export const Images = {
     'attached': process.env.PUBLIC_URL + '/button_process',
-    'deattached': process.env.PUBLIC_URL + '/button_process',
-    'processing': process.env.PUBLIC_URL + '/button_process',
+    'working': process.env.PUBLIC_URL + '/button_process',
     'paused': process.env.PUBLIC_URL + '/button_pause',
     'stopped': process.env.PUBLIC_URL + '/button_stop',
     'terminated': process.env.PUBLIC_URL + '/button_terminate',
     'addWork': process.env.PUBLIC_URL + '/button_add_work.svg',
     'close': process.env.PUBLIC_URL + '/button_close.svg',
 };
+
+export const ControlButtonStyle = {
+    'waiting': { name: '시작하기', bgColor: '#0046C0' },
+    'attached': { name: '정지하기', bgColor: '#ff9e01'},
+    'working': { name: '정지하기', bgColor: '#ff9e01'},
+    'stopped': { name: '삭제하기', bgColor: '#444444'},
+}
 
 export const CollectTargetName = {
     // 'nav': '네이버',

@@ -1,9 +1,10 @@
+import os
 import time
 from bs4 import BeautifulSoup
 import config as cfg
 import kkconn
-import modules.collect.dir as dir
 
+current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 def get_url(work, target_page_no, chromeDriver, conf):
     url_set = set([])
 
@@ -12,7 +13,7 @@ def get_url(work, target_page_no, chromeDriver, conf):
         keyword = work["keyword"]
         start_date = work["start_date"]
         end_date = work["end_date"]
-        url = cfg.get_collect_url(channel, target_page_no, keyword, start_date, end_date, config_path=dir.config_path)
+        url = cfg.get_collect_url(channel, target_page_no, keyword, start_date, end_date, config_path=current_path)
         chromeDriver.get(url)
 
         time.sleep(conf[channel]["delay_time"])  # Crome Drive가 소스를 받는데 시간이 필요함
@@ -29,8 +30,9 @@ def get_url(work, target_page_no, chromeDriver, conf):
 
 
 def collect_urls(work):
-    conf = cfg.get_config(path=dir.config_path)
-    chromeDriver = cfg.get_chrome_driver(config_path=dir.config_path)
+
+    conf = cfg.get_config(path=current_path)
+    chromeDriver = cfg.get_chrome_driver(config_path=current_path)
 
     current_url_count = 0
     channel = work["channel"]

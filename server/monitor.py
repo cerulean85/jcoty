@@ -1,7 +1,6 @@
 import json, os, time
 import dbconn as db
 import config as cfg
-import modules.collect.dir as dir
 
 def daemon():
     current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
@@ -26,7 +25,7 @@ def daemon():
                         if ".csvf" in filename:
                             continue
                         target_file_path = target_csv_save_dir + filename
-                        file = open(target_file_path, 'r')
+                        file = open(target_file_path, 'r', encoding="utf-8")
                         csv_line_count = len(file.readlines()) #file.read().count('\n')+1
                         target_csv_line_count += csv_line_count
                         file.close()

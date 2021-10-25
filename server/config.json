@@ -11,9 +11,9 @@
   },
 
   "storage": {
-    "save_dir": "/data/wed_storage/",
-    "html_save_dir": "/data/wed_storage/html/",
-    "csv_save_dir": "/data/wed_storage/csv/",
+    "save_dir": "../data/",
+    "html_save_dir": "../data/html/",
+    "csv_save_dir": "../data/csv/",
     "kafka": {
       "addr": "localhost",
       "port": 9092

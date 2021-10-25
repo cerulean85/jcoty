@@ -1,5 +1,6 @@
 import React from "react";
 import * as R from "../Resources";
+import {ControlButtonStyle} from "../Resources";
 
 class ButtonControl extends React.Component {
 
@@ -30,49 +31,16 @@ class ButtonControl extends React.Component {
 
     render() {
 
-        let iconSrc = R.Images[this.props.value] + '.svg';
-        if(this.props.currentState === R.STATE_WAITING) {
-            if(this.props.value === R.STATE_PAUSED || this.props.value === R.STATE_STOPPED) {
-                iconSrc = R.Images[this.props.value] + '_disabled.svg';
-            }
-            if(this.props.value === R.STATE_PROCESSING) {
-                iconSrc = R.Images[R.STATE_PROCESSING] + '.svg';
-            }
-        }
-
-        if(this.props.currentState === R.STATE_PROCESSING) {
-            if(this.props.value === R.STATE_PROCESSING || this.props.value === R.STATE_TERMINATED) {
-                iconSrc = R.Images[this.props.value] + '_disabled.svg';
-            }
-        }
-
-        if(this.props.currentState === R.STATE_PAUSED) {
-            if(this.props.value === R.STATE_PAUSED || this.props.value === R.STATE_TERMINATED) {
-                iconSrc = R.Images[this.props.value] + '_disabled.svg';
-            }
-        }
-
-        if(this.props.currentState === R.STATE_STOPPED) {
-            if(this.props.value === R.STATE_STOPPED || this.props.value === R.STATE_PAUSED) {
-                iconSrc = R.Images[this.props.value] + '_disabled.svg';
-            }
-        }
-
-        if(this.props.currentState === R.STATE_FINISHED) {
-            if(this.props.value === R.STATE_PROCESSING || this.props.value === R.STATE_STOPPED || this.props.value === R.STATE_PAUSED) {
-                iconSrc = R.Images[this.props.value] + '_disabled.svg';
-            }
-            if(this.props.value === R.STATE_FINISHED) {
-                iconSrc = R.Images[R.STATE_FINISHED] + '.svg';
-            }
-        }
+        let btnColor = R.ControlButtonStyle[this.props.value].bgColor
+        let btnName = R.ControlButtonStyle[this.props.value].name
+        // let iconSrc = R.Images[this.props.value] + '.svg';
 
         return (
             <div
                 style={
                     {
-                        width: 30,
-                        height: 30,
+                        width: 80,
+                        height: 40,
                         border: '0px',
                         position: 'relative',
                         opacity: this.state.opacity,
@@ -85,17 +53,31 @@ class ButtonControl extends React.Component {
                     this.props.onClick();
                     e.stopPropagation();
                 }}>
-                <img
-                    src={ iconSrc }
-                    style={{
-                        width:20,
-                        height: 20,
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
-                    }}
-                />
+                <div
+                    style={
+                        {
+                            width: 80,
+                            height: 30,
+                            borderRadius: 10,
+                            paddingTop: 10,
+                            backgroundColor: btnColor,
+                            fontSize: 14
+                        }
+                    }>
+                    {btnName}
+                </div>
+
+                {/*<img*/}
+                {/*    src={ iconSrc }*/}
+                {/*    style={{*/}
+                {/*        width:20,*/}
+                {/*        height: 20,*/}
+                {/*        position: 'absolute',*/}
+                {/*        top: '50%',*/}
+                {/*        left: '50%',*/}
+                {/*        transform: 'translate(-50%, -50%)'*/}
+                {/*    }}*/}
+                {/*/>*/}
             </div>
         );
     }

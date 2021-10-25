@@ -2,7 +2,7 @@ import React from "react";
 import ProgressStateTextBox from "./ProgressStateTextBox";
 import ButtonControl from "./ButtonControl";
 import * as R from "../Resources";
-import * as CFG from "../Config"
+import cfg from "../config"
 import axios from "axios";
 import {CollectTargetName} from "../Resources";
 
@@ -34,10 +34,11 @@ class WorkItem extends React.Component {
         const request = async () => {
             // alert(this.state.item.id)
             let data = { id: this.state.item.id };
-            const response = await axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/attach_work", data);
+            const response = await axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/attach_work`, data);
             if (response.status !== 200) {
                 alert('요청한 작업을 수행할 수 없습니다.');
             } else {
+                // alert('처리되었습니다.');
                 this.setState( { value: R.STATE_ATTACHED } )
                 window.location.reload();
             }
@@ -55,7 +56,7 @@ class WorkItem extends React.Component {
 
         const request = async () => {
             let data = { id: this.state.item.id };
-            const response = await axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/action/stop_work", data);
+            const response = await axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/stop_work`, data);
             if (response.status !== 200) {
                 alert('요청한 작업을 수행할 수 없습니다.');
             } else {
@@ -77,7 +78,7 @@ class WorkItem extends React.Component {
 
         const request = async () => {
             let data = { id: this.state.item.id };
-            const response = await axios.post("http://" + CFG.proxyIP + ':' + CFG.proxyPort + "/terminate_work", data);
+            const response = await axios.post(`http://${cfg.host}:${cfg.proxyPort}/action/terminate_work`, data);
             if (response.status !== 200) {
                 alert('요청한 작업을 수행할 수 없습니다.');
             } else {
@@ -99,7 +100,7 @@ class WorkItem extends React.Component {
 
     renderButtonAttach() {
         return <ButtonControl
-            value={ R.STATE_ATTACHED }
+            value={ R.STATE_WAITING }
             workState = {this.state.item.work_state}
             groupdId = {this.state.item.id}
             onClick={()=> this.attach()}
@@ -108,7 +109,7 @@ class WorkItem extends React.Component {
 
     renderButtonStop() {
         return <ButtonControl
-            value={ R.STATE_STOPPED }
+            value={ R.STATE_WORKING }
             workState = {this.state.item.work_state}
             groupdId = {this.state.item.id}
             onClick={()=> this.stop()}
@@ -127,24 +128,14 @@ class WorkItem extends React.Component {
 
     render() {
 
-        // console.log(this.state.item.channels)
         const secs = this.state.item.update_time;
         var hour   = "00"
         var minute = "00"
         var second = "00"
         let timeView, controlView, collectionState
+        let itemViewHeight = 220
         if (this.state.item.work_state === R.STATE_WAITING) {
-            controlView =
-                <div style={{
-                        // float: 'right',
-                        position: 'absolute',
-                        top: '50%',
-                        left: '86%',
-                        transform: 'translate(-20%, -50%)',
-                        display: 'flex',
-                    }}>
-                    {this.renderButtonAttach()}&nbsp;&nbsp;
-                </div>
+            controlView = this.renderButtonAttach()
         }
 
         if (this.state.item.work_state === R.STATE_ATTACHED) {
@@ -160,40 +151,33 @@ class WorkItem extends React.Component {
 
             timeView = <div style={{ paddingTop:6, paddingLeft: 20, fontSize:16, color: '#aeaeae' }}>
                 경과:&nbsp;<label style={{color:'#ff9e01', fontSize:16}}>{hour}:{minute}:{second}</label>
-                {/*&nbsp;&nbsp;/&nbsp;&nbsp;*/}
-                {/*완료:&nbsp;&nbsp;<label style={{color:'#a9d18e', fontSize:18}}>{this.state.item.current_work_count}</label>*/}
-                {/*&nbsp;건&nbsp;(총&nbsp;*/}
-                {/*<label style={{color:'#0099ff', fontSize:18}}>{this.state.item.total_work_count}</label>건)&nbsp;*/}
             </div>
 
-            controlView =
-                <div style={{
-                        // float: 'right',
-                        position: 'absolute',
-                        top: '50%',
-                        left: '86%',
-                        transform: 'translate(-20%, -50%)',
-                        display: 'flex',
-                    }}>
-                    {this.renderButtonStop()}&nbsp;&nbsp;
-                </div>
+            controlView = this.renderButtonStop()
+        }
+
+        if (this.state.item.work_state === R.STATE_WORKING) {
+
+            const hourNum = Math.floor(secs / 3600);
+            const hourMod = secs % 3600;
+            const minuteNum = Math.floor(hourMod / 60);
+            const minuteMod = hourMod % 60;
+
+            hour   = (hourNum < 10 ? '0':'') + hourNum;
+            minute = (minuteNum < 10 ? '0':'') + minuteNum;
+            second = (minuteMod < 10 ? '0':'') + Math.floor(minuteMod);
+
+            timeView = <div style={{ paddingTop:6, paddingLeft: 20, fontSize:16, color: '#aeaeae' }}>
+                경과:&nbsp;<label style={{color:'#ff9e01', fontSize:16}}>{hour}:{minute}:{second}</label>
+            </div>
+            controlView = this.renderButtonStop()
         }
 
         if (this.state.item.work_state === R.STATE_STOPPED) {
-            controlView =
-                <div style={{
-                    // float: 'right',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '86%',
-                    transform: 'translate(-20%, -50%)',
-                    display: 'flex',
-                }}>
-                    {this.renderButtonTerminate()}&nbsp;&nbsp;
-                </div>
+            controlView = this.renderButtonTerminate()
         }
 
-        if (this.state.item.work_state === R.STATE_ATTACHED || this.state.item.work_state === R.STATE_STOPPED) {
+        if (this.state.item.work_state === R.STATE_WORKING || this.state.item.work_state === R.STATE_STOPPED) {
             let total_html_file_count = 0
             let total_csv_line_count = 0
             const report = this.state.item.report;
@@ -201,8 +185,10 @@ class WorkItem extends React.Component {
                 total_html_file_count += report[channel].html_file_count
                 total_csv_line_count += report[channel].csv_line_count
             }
-            collectionState = <div>&nbsp;&nbsp;HTML문서 <font color={"#00b050"}>{total_html_file_count}</font>건 수집,
+            collectionState =
+                <div>&nbsp;&nbsp;HTML문서 <font color={"#00b050"}>{total_html_file_count}</font>건 수집,
                 추출된 텍스트 <font color={"#FF4E00"}>{total_csv_line_count}</font>줄</div>
+
         } else {
             collectionState = <div>&nbsp;&nbsp;-</div>
         }
@@ -218,7 +204,6 @@ class WorkItem extends React.Component {
         let channelListText = <div>{channelsTxt}</div>
 
         return (
-            // {rect}
         <div
             onMouseEnter={this.handleMouseHover}
             onMouseLeave={this.handleMouseLeave}
@@ -226,88 +211,43 @@ class WorkItem extends React.Component {
                 this.props.openPopup();
             }}
             style={{
-                position: 'relative',
-                width: '100%',
-                height:220,
+                position: 'relative', width: '100%', height: itemViewHeight,
                 backgroundColor: this.state.backgroundColor,
-                borderBottom: '1px solid black',
-                display: 'flex',
-                cursor: 'pointer',
-                }}
-        >
-            {controlView}
+                borderBottom: '1px solid black', display: 'flex', cursor: 'pointer' }}>
             <div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top:'10%',
-                        left: '2%',
-                        display: 'flex'
-                    }}>
+                <div style={{ position: 'absolute', top:'10%', left: '2%', display: 'flex' }}>
                     {this.renderProgressStateTextBox()}
                     {timeView}
-
                 </div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top:'30%',
-                        left: '2%',
-                        display: 'flex',
-                        fontSize: '12pt'
-                    }}>
+                <div style={{ position: 'absolute', top:'30%', left: '2%', display: 'flex', fontSize: '12pt' }}>
                     <font color={"#aeaeae"}>수집현황: </font>
                     {collectionState}
                 </div>
                 <div
-                    style={{
-                        position: 'absolute',
-                        top:'43%',
-                        left: '2%',
-                        display: 'flex',
-                        fontSize: '12pt'
-                    }}>
+                    style={{ position: 'absolute', top:'43%', left: '2%', display: 'flex', fontSize: '12pt' }}>
                     <font color={"#aeaeae"}>수집채널: </font>
                     &nbsp;&nbsp;{channelListText}
                 </div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top:'56%',
-                        left: '2%',
-                        display: 'flex',
-                        fontSize: '12pt'
-                    }}>
+                <div style={{ position: 'absolute', top:'56%', left: '2%', display: 'flex', fontSize: '12pt' }}>
                     <font color={"#aeaeae"}>키워드: </font>
                     &nbsp;&nbsp;{this.state.item.keywords}
                 </div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top:'69%',
-                        left: '2%',
-                        display: 'flex',
-                        fontSize: '12pt'
-                    }}>
+                <div style={{ position: 'absolute', top:'69%', left: '2%', display: 'flex', fontSize: '12pt' }}>
                     <font color={"#aeaeae"}>수집기간: </font>
-                    &nbsp;&nbsp;{this.state.item.start_date}&nbsp;~&nbsp;{this.state.item.end_date}
+                    &nbsp;&nbsp;{this.state.item.start_date.split(' ')[0]}
+                    &nbsp;~&nbsp;{this.state.item.end_date.split(' ')[0]}
                 </div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top:'82%',
-                        left: '2%',
-                        display: 'flex',
-                        fontSize: '12pt'
-                    }}>
+                <div style={{ position: 'absolute', top:'82%', left: '2%', display: 'flex', fontSize: '12pt' }}>
                     <font color={"#aeaeae"}>설명: </font>
                     &nbsp;&nbsp;{this.state.item.title}
                 </div>
             </div>
-            {controlView}
 
-
-
+            <div style={{
+                position: 'absolute', top: '50%', left: '86%',
+                transform: 'translate(-20%, -50%)', display: 'flex' }}>
+                {controlView}
+            </div>
         </div>
         );
     }
