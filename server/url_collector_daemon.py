@@ -49,9 +49,6 @@ if __name__ == '__main__':
                 .update({dbconn.WorkGroups.work_state: "working"})
             dbconn.session.commit()
 
-        work_group_list = dbconn.session.query(dbconn.WorkGroups).filter(
-            dbconn.WorkGroups.work_state == 'working').all()
-        for wg in work_group_list:
             channels = wg.channels.split(',')
             procs = []
             for channel in channels:

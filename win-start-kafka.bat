@@ -14,11 +14,10 @@ SET KAFKA_PATH=%cd%\kafka
 		@START /B CMD /C %KAFKA_PATH%\bin\windows\kafka-server-start.bat %KAFKA_PATH%\config\server.properties
 		goto _break
 	)
-	
+	timeout 3
 goto _loop
 :_break
 
-TIMEOUT 5
 :_loop
 	FOR /F "tokens=4 delims= " %%p IN ('netstat -ano ^| findstr "9092"') DO (
 		SET result=%%p
@@ -27,11 +26,10 @@ TIMEOUT 5
 		ECHO Kafka Started.
 		goto _break
 	)
-	@REM timeout 3
+	timeout 3
 goto _loop
 :_break
 
-TIMEOUT 30
 SET SERVER_PATH=%cd%\server
 
 @START /B CMD /C python %SERVER_PATH%\url_collector_daemon.py
@@ -45,4 +43,6 @@ ECHO TEXT EXTRACTOR started.
 
 @START /B CMD /C python %SERVER_PATH%\monitor.py
 ECHO MONITOR started.
+
+
 ENDLOCAL
