@@ -10,7 +10,8 @@ def kafka_producer(urls, work):
     work_group_no = work["work_group_no"]
     date = work["start_date"]
     keyword = work["keyword"]
-    topic_name = "urls"
+    timestamp = work["timestamp"]
+    topic_name = "urls-" + timestamp
 
     producer.send(topic_name, value=str(json.dumps({
         'channel': channel, 'urls': urls, "work_group_no": work_group_no, "keyword": keyword, "date": date

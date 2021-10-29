@@ -6,6 +6,8 @@ import url_collector_nav as ucnb
 import url_collector_twt as uct
 import url_collector_ins as uci
 import url_collector_dna as ucd
+import datetime as pydatetime
+import html_downloader as hd
 
 def date_range(start, end):
     start = datetime.strptime(start, "%Y-%m-%d")
@@ -44,6 +46,12 @@ if __name__ == '__main__':
         work_group_list = dbconn.session.query(dbconn.WorkGroups).filter(
             dbconn.WorkGroups.work_state == 'attached').all()
         for wg in work_group_list:
+            wg.mq_timestamp = str(int(pydatetime.datetime.now().timestamp()))
+            time.sleep(0.5)
+        dbconn.session.commit()
+        dbconn.session.flush()
+
+        for wg in work_group_list:
             dbconn.session.query(dbconn.WorkGroups) \
                 .filter(dbconn.WorkGroups.id == wg.id) \
                 .update({dbconn.WorkGroups.work_state: "working"})
@@ -61,8 +69,10 @@ if __name__ == '__main__':
                         "end_date": str(wg.end_date),
                         "work_type": "collect_url",
                         "work_group_no": wg.id,
+                        "timestamp": wg.mq_timestamp
                     }
                     procs.append(Process(target=collect_urls, args=(work,)))
+                    procs.append(Process(target=hd.download, args=(work,)))
 
             for proc in procs:
                 proc.start()

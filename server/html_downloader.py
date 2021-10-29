@@ -12,12 +12,14 @@ from collections import Counter
 
 current_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 conf = cfg.get_config(path=current_path)
-consumer = kkconn.kafka_consumer("urls")
 html_save_dir = conf["storage"]["html_save_dir"]
 csv_save_dir = conf["storage"]["csv_save_dir"]
 channel_spec = conf["channel_spec"]
 
-def work(work_channel_type):
+def download(work):
+    work_channel_type = work["channel"]
+    topicname = "urls-" + work["timestamp"]
+    consumer = kkconn.kafka_consumer(topicname)
     chromeDriver = cfg.get_chrome_driver(current_path)
     while True:
         # print("Waiting...")
@@ -100,14 +102,14 @@ def work(work_channel_type):
                     print('Written {}...'.format(save_file_path))
 
 
-if __name__ == "__main__":
-    procs = []
-    procs.append(Process(target=work, args=("ins",)))
-    procs.append(Process(target=work, args=("twt",)))
-    procs.append(Process(target=work, args=("nav",)))
-    procs.append(Process(target=work, args=("dna",)))
-    for proc in procs:
-        proc.start()
+# if __name__ == "__main__":
+#     procs = []
+#     procs.append(Process(target=work, args=("ins",)))
+#     procs.append(Process(target=work, args=("twt",)))
+#     procs.append(Process(target=work, args=("nav",)))
+#     procs.append(Process(target=work, args=("dna",)))
+#     for proc in procs:
+#         proc.start()
     # for record in records:
     #     print(record.value)
     # url_info = json.loads(str(message.value.decode('utf-8')))

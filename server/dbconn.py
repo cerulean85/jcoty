@@ -44,7 +44,7 @@ db_conn_info = {
 db_url = f"mysql+pymysql://{db_conn_info['user']}:{db_conn_info['password']}@" \
          f"{db_conn_info['host']}:{db_conn_info['port']}/{db_conn_info['database']}?charset=utf8"
 
-db_url = 'sqlite:///jcoty.db'
+db_url = 'sqlite:///../jcoty.db'
 
 
 Base = declarative_base()
@@ -62,6 +62,7 @@ class WorkGroups(Base):
     update_time = db.Column(db.Text, nullable=True)
     # update_time = db.Column(db.DateTime, nullable=True)
     report = db.Column(db.Text, nullable=True)
+    mq_timestamp = db.Column(db.Text, nullable=True)
     deleted = db.Column(db.Integer, nullable=True, default=0)
 
 
@@ -71,6 +72,10 @@ conn = engine.connect()
 metadata = db.MetaData()
 table = db.Table('work_groups', metadata, autoload=True, autoload_with=engine)
 
+# session.query(WorkGroups) \
+#     .filter(WorkGroups.id == 19) \
+#     .update({WorkGroups.work_state: "working"})
+# session.commit()
 # SELECT!!
 # work_group_list = session.query(WorkGroups).filter(WorkGroups.work_state == 'waiting').all()
 
