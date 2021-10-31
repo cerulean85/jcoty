@@ -43,7 +43,7 @@ def get_chrome_driver(config_path=''):
     osname = platform.system()
     driver_path = current_path + conf["chrome_driver"]["path"] + ('' if osname == "Linux" else '.exe')
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    # options.add_argument('headless')
     options.add_argument('--no-sandbox')
     # options.add_argument('disable-gpu')
     options.set_capability('unhandledPromptBehavior', 'accept')
