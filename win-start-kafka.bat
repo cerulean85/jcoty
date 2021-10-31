@@ -14,7 +14,7 @@ SET KAFKA_PATH=%cd%\kafka
 		@START /B CMD /C %KAFKA_PATH%\bin\windows\kafka-server-start.bat %KAFKA_PATH%\config\server.properties
 		goto _break
 	)
-	timeout 3
+	timeout 10
 goto _loop
 :_break
 
@@ -26,7 +26,7 @@ goto _loop
 		ECHO Kafka Started.
 		goto _break
 	)
-	timeout 3
+	timeout 10
 goto _loop
 :_break
 
