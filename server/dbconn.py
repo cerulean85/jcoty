@@ -44,7 +44,7 @@ db_conn_info = {
 db_url = f"mysql+pymysql://{db_conn_info['user']}:{db_conn_info['password']}@" \
          f"{db_conn_info['host']}:{db_conn_info['port']}/{db_conn_info['database']}?charset=utf8"
 
-db_url = 'sqlite:///../jcoty.db'
+db_url = 'sqlite:///jcoty.db'
 
 
 Base = declarative_base()
