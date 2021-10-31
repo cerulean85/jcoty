@@ -36,9 +36,6 @@ data
 shell/windows/kafka/%USERPROFILE%
 client/.idea
 kafka/logs
-client/proxy/config.js
-client/src/config.js
 _jcoty.db
-client/proxy/config.js
 client/src/App - 복사본.js
 client/src/components/ButtonOpenAddWorkWindow - 복사본.js
