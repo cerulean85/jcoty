@@ -3,7 +3,7 @@
 
 **WCTT**
 
-**W**eb **C**rawling system based on **T**ag path and **T**ext appearnce frequency on the web from **Y**ours.
+**W**eb **C**rawling system based on **T**ag path and **T**ext appearnce frequency
 
 
 **First**
